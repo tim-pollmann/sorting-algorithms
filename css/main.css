@@ -10,9 +10,22 @@
 #visualizer {
   display: flex;
   flex-direction: row;
+  height: 500px;
 }
 
 .element {
-  background-color: #646cff;
   margin-left: 1px;
+  width: 20px;
+}
+
+.blue {
+  background-color: #646cff;
+}
+
+.green {
+  background-color: greenyellow;
+}
+
+.red {
+  background-color: red;
 }
