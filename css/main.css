@@ -13,19 +13,19 @@
   height: 500px;
 }
 
-.element {
+.array-element {
   margin-left: 1px;
-  width: 20px;
+  width: 100%;
 }
 
-.blue {
+.standard {
   background-color: #646cff;
 }
 
-.green {
+.finished {
   background-color: greenyellow;
 }
 
-.red {
+.highlighted {
   background-color: red;
 }
