@@ -10,7 +10,17 @@
 
 <body>
   <div id="toolbar">
-    Placeholder
+    <label for="algorithmSelect">Algorithm:</label>
+    <select id="algorithmSelect">
+      <option value="bubbleSort">Bubble Sort</option>
+      <option value="mergeSort">Merge Sort</option>
+    </select>
+    <label for="numberOfArrayElementsSlider">Elements:</label>
+    <input type="range" min="4" max="100" value="50" class="slider" id="numberOfArrayElementsSlider" />
+    <label for="speedSlider">Speed:</label>
+    <input type="range" min="1" max="500" value="50" class="slider" id="speedSlider" />
+    <button id="generateArrayButton">Generate array</button>
+    <button id="startButton">Start</button>
   </div>
   <!-- Visualizer will be injected here -->
   <script type="module" src="/javascript/main.ts"></script>

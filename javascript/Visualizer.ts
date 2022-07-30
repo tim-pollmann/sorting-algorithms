@@ -8,10 +8,11 @@ export default class extends HTMLDivElement {
     super();
     this.id = 'visualizer';
     this.timeout = 10;
-    this.generateArray(100);
   }
 
   generateArray(numberOfArrayElements: number) {
+    this.innerHTML = '';
+
     const arrayElements = Array.from(
       { length: numberOfArrayElements },
       () => new ArrayElement(Math.floor(Math.random() * 100) + 1),
@@ -22,8 +23,8 @@ export default class extends HTMLDivElement {
     }
   }
 
-  setTimout(milliseconds: number) {
-    this.timeout = milliseconds;
+  setSpeed(speed: number) {
+    this.timeout = 100.0 / speed;
   }
 
   insertBeforeArrayElement = (idx: number, idxTarget: number) => {
@@ -46,6 +47,13 @@ export default class extends HTMLDivElement {
 
     this.replaceChild(arrayElement2, placeholder1);
     this.replaceChild(arrayElement1, placeholder2);
+  };
+
+  resetColors = () => {
+    for (let i = 0; i < this.children.length; i++) {
+      const arrayElement = this.children[i] as ArrayElement;
+      arrayElement.resetColor();
+    }
   };
 
   bubbleSort = async () => {
@@ -100,6 +108,11 @@ export default class extends HTMLDivElement {
 
         leftArrayElement.resetColor();
         rightArrayElement.resetColor();
+
+        if (leftIdx === 0 && rightIdx === this.children.length - 1) {
+          const arrayElement = this.children[i - 1] as ArrayElement;
+          arrayElement.setFinished();
+        }
       }
     };
 
@@ -115,10 +128,9 @@ export default class extends HTMLDivElement {
 
     await sort(0, this.children.length - 1);
 
-    for (let i = this.children.length - 1; i >= 0; i--) {
+    for (let i = 0; i < this.children.length; i++) {
       const arrayElement = this.children[i] as ArrayElement;
       arrayElement.setFinished();
-      await sleep(this.timeout);
     }
   };
 }
