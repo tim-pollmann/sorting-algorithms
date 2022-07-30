@@ -8,15 +8,15 @@ export default class extends HTMLDivElement {
     this.style.height = `${value.toString()}%`;
   }
 
-  setFinished() {
+  setFinished = () => {
     this.className = 'array-element finished';
-  }
+  };
 
-  setHighlighted() {
+  setHighlighted = () => {
     this.className = 'array-element highlighted';
-  }
+  };
 
-  resetColor() {
+  resetColor = () => {
     this.className = 'array-element standard';
-  }
+  };
 }
