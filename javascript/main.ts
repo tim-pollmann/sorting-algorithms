@@ -7,6 +7,4 @@ customElements.define('please-do-not-use-either', Visualizer, { extends: 'div' }
 const visualizer = new Visualizer(100);
 document.body.appendChild(visualizer);
 
-visualizer.bubbleSort();
-
-// export { };
+visualizer.mergeSort();
