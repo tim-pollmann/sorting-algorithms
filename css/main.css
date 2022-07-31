@@ -5,7 +5,7 @@ body {
   width: 100vw;
 }
 
-body div {
+#app {
   padding: 5px;
 }
 
