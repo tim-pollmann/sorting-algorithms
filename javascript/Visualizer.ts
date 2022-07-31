@@ -25,6 +25,7 @@ export default class extends HTMLDivElement {
 
   setSpeed(speed: number) {
     this.timeout = 100.0 / speed;
+    this.timeout = 100;
   }
 
   insertBeforeArrayElement = (idx: number, idxTarget: number) => {
@@ -131,6 +132,28 @@ export default class extends HTMLDivElement {
     for (let i = 0; i < this.children.length; i++) {
       const arrayElement = this.children[i] as ArrayElement;
       arrayElement.setFinished();
+    }
+  };
+
+  insertionSort = async () => {
+    for (let i = 1; i < this.children.length; i++) {
+      const arrayElement = this.children[i] as ArrayElement;
+      arrayElement.setHighlighted();
+      let j = i;
+
+      do {
+        await sleep(this.timeout);
+
+        const currentArrayElement = this.children[j - 1] as ArrayElement;
+        if (arrayElement.value > currentArrayElement.value) {
+          break;
+        }
+
+        this.swapWithLowerArrayElement(j);
+        j--;
+      } while (j > 0);
+
+      arrayElement.resetColor();
     }
   };
 }

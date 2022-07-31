@@ -33,7 +33,7 @@ const init = () => {
 
     switch (algorithmSelect.value) {
       case 'bubbleSort':
-        await visualizer.bubbleSort();
+        await visualizer.insertionSort();
         break;
       case 'mergeSort':
         await visualizer.mergeSort();
