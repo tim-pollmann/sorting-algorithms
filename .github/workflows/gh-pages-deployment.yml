@@ -1,0 +1,31 @@
+name: Deployment to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm i
+    - run: npm run build
+    - name: Deploy to GitHub Pages
+      uses: jamesIves/github-pages-deploy-action@v4.3.0
+      with:
+        branch: gh-pages
+        folder: dist
+    
+    
