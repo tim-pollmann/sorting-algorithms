@@ -1,4 +1,4 @@
-name: Deployment to GitHub Pages
+name: build and move build to branch 'gh-pages'
 
 on:
   push:
@@ -20,9 +20,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm i
+    - run: npm ci
     - run: npm run build
-    - name: Deploy to GitHub Pages
+    - name: move build to branch 'gh-pages'
       uses: jamesIves/github-pages-deploy-action@v4.3.0
       with:
         branch: gh-pages
