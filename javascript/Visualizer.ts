@@ -1,13 +1,19 @@
 import ArrayElement from './ArrayElement';
 import { sleep } from './helper';
 
+const speedToTimeout : {[speed: string]: number} = {
+  slow: 50,
+  medium: 25,
+  fast: 0,
+};
+
 export default class extends HTMLDivElement {
-  timeout: number;
+  speed: string;
 
   constructor() {
     super();
     this.id = 'visualizer';
-    this.timeout = 10;
+    this.speed = 'medium';
   }
 
   generateArray(numberOfArrayElements: number) {
@@ -23,9 +29,8 @@ export default class extends HTMLDivElement {
     }
   }
 
-  setSpeed(speed: number) {
-    this.timeout = 100.0 / speed;
-    this.timeout = 100;
+  setSpeed(speed: string) {
+    this.speed = speed;
   }
 
   insertBeforeArrayElement = (idx: number, idxTarget: number) => {
@@ -73,7 +78,7 @@ export default class extends HTMLDivElement {
           rightArrayElement.setHighlighted();
         }
 
-        await sleep(this.timeout);
+        await sleep(speedToTimeout[this.speed]);
       }
 
       (this.children[i - 1] as ArrayElement).setFinished();
@@ -96,7 +101,7 @@ export default class extends HTMLDivElement {
         leftArrayElement.setHighlighted();
         rightArrayElement.setHighlighted();
 
-        await sleep(this.timeout);
+        await sleep(speedToTimeout[this.speed]);
 
         if (leftArrayElement.value <= rightArrayElement.value) {
           i++;
@@ -142,7 +147,7 @@ export default class extends HTMLDivElement {
       let j = i;
 
       do {
-        await sleep(this.timeout);
+        await sleep(speedToTimeout[this.speed]);
 
         const currentArrayElement = this.children[j - 1] as ArrayElement;
         if (arrayElement.value > currentArrayElement.value) {

@@ -5,41 +5,66 @@ const init = () => {
   customElements.define('please-do-not-use', ArrayElement, { extends: 'div' });
   customElements.define('please-do-not-use-either', Visualizer, { extends: 'div' });
 
+  const app = document.getElementById('app');
   const startButton = document.getElementById('startButton') as HTMLButtonElement;
-  const algorithmSelect = document.getElementById('algorithmSelect') as HTMLSelectElement;
-  const numberOfArrayElementsSlider = document.getElementById('numberOfArrayElementsSlider') as HTMLInputElement;
-  const speedSlider = document.getElementById('speedSlider') as HTMLInputElement;
+  const algorithms = document.getElementsByName('algorithm');
+  const numberOfArrayElementsSlider = document.getElementById('arraySize') as HTMLInputElement;
+  const speeds = document.getElementsByName('speed');
   const toolbar = document.getElementById('toolbar');
   const generateArrayButton = document.getElementById('generateArrayButton');
 
-  if (startButton == null
-        || algorithmSelect == null
+  if (app == null
+        || startButton == null
+        || algorithms == null
         || numberOfArrayElementsSlider == null
-        || speedSlider == null
+        || speeds == null
         || toolbar == null
         || generateArrayButton == null) {
     return;
   }
 
   const visualizer = new Visualizer();
-  document.body.appendChild(visualizer);
+  app.appendChild(visualizer);
+
   visualizer.generateArray(parseInt(numberOfArrayElementsSlider.value, 10));
-  visualizer.setSpeed(parseInt(speedSlider.value, 10));
 
   startButton.addEventListener('click', async () => {
     toolbar.className = 'disabled';
     visualizer.resetColors();
-    visualizer.setSpeed(parseInt(speedSlider.value, 10));
 
-    switch (algorithmSelect.value) {
-      case 'bubbleSort':
-        await visualizer.insertionSort();
+    for (let i = 0; i < speeds.length; i++) {
+      const speed = speeds[i] as HTMLInputElement;
+      if (speed.checked) {
+        visualizer.setSpeed(speed.value);
         break;
-      case 'mergeSort':
-        await visualizer.mergeSort();
+      }
+    }
+
+    for (let i = 0; i < algorithms.length; i++) {
+      const algorithm = algorithms[i] as HTMLInputElement;
+
+      if (algorithm.checked) {
+        switch (algorithm.value) {
+          case 'insertionSort':
+            await visualizer.insertionSort();
+            break;
+          case 'selectionSort':
+            break;
+          case 'bubbleSort':
+            await visualizer.bubbleSort();
+            break;
+          case 'quickSort':
+            break;
+          case 'mergeSort':
+            await visualizer.mergeSort();
+            break;
+          case 'heapSort':
+            break;
+          default:
+            break;
+        }
         break;
-      default:
-        break;
+      }
     }
 
     toolbar.className = '';
