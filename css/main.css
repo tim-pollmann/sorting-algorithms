@@ -1,10 +1,22 @@
 @import "reset.css";
 
 body {
+  --background-color: rgb(233, 233, 233);
+  --toolbar-background-color: rgb(152, 152, 152);
+
+  --input-color: rgb(233, 233, 233);
+  --hover-input-color: #dfd;
+  --selected-input-color: #bfb;
+
+  --array-element-color: blue;
+  --array-element-highlighted-color: red;
+  --array-element-finished-color: green;
+
   height: 100vh;
   width: 100vw;
   font-family: sans-serif, Arial;
   font-size: 16px;
+  background-color: var(--background-color);
 }
 
 #app {
@@ -22,11 +34,11 @@ body {
 .form-group {
   display: flex;
   flex-direction: column;
-  background-color: blue;
+  background-color: var(--toolbar-background-color);
+  margin-bottom: 5px;
   padding: 5px 10px;
   border: 0px;
   border-radius: 4px;
-  margin-bottom: 2px;
 }
 
 .form-group-header {
@@ -43,42 +55,37 @@ body {
 .form-group label,
 .form-group button {
   display: inline-block;
+  background-color: var(--input-color);
+  margin-bottom: 2px;
   padding: 5px 10px;
   border: 0px;
   border-radius: 4px;
-  margin-bottom: 2px;
-}
-
-.form-group button {
-  background-color: aqua;
-}
-
-.form-group input[type="radio"]:checked+label {
-  background-color: #bfb;
+  cursor: pointer;
+  text-align: left;
 }
 
 .form-group label:hover,
 .form-group button:hover {
-  background-color: #dfd;
+  background-color: var(--hover-input-color);
 }
 
+.form-group input[type="radio"]:checked+label,
 .form-group button:active {
-  background-color: aquamarine;
+  background-color: var(--selected-input-color);
 }
 
 .slider {
   -webkit-appearance: none;
   width: 100%;
   height: 25px;
-  background: #d3d3d3;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
+  background: var(--input-color);
+  cursor: pointer;
+  border: 0px;
+  border-radius: 4px;
 }
 
 .slider:hover {
-  opacity: 1;
+  background-color: var(--hover-input-color);
 }
 
 .slider::-webkit-slider-thumb {
@@ -86,44 +93,44 @@ body {
   appearance: none;
   width: 25px;
   height: 25px;
-  background: #04AA6D;
-  cursor: pointer;
+  background: var(--selected-input-color);
+  border: 0px;
+  border-radius: 4px;
 }
 
 .slider::-moz-range-thumb {
   width: 25px;
   height: 25px;
-  background: #04AA6D;
-  cursor: pointer;
+  background: var(--selected-input-color);
+  border: 0px;
+  border-radius: 4px;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.4;
 }
 
 #visualizer {
   display: flex;
   flex-direction: row;
   flex-grow: 1;
-  height: 300px;
+  height: 90vh;
 }
 
 .array-element {
+  width: 100%;
+  background-color: var(--array-element-color);
   margin-left: 0.5px;
   margin-right: 0.5px;
-  width: 100%;
+  border: 0px;
   border-radius: 5px;
 }
 
-.standard {
-  background-color: #646cff;
+.highlighted {
+  background-color: var(--array-element-highlighted-color);
 }
 
 .finished {
-  background-color: greenyellow;
-}
-
-.highlighted {
-  background-color: red;
-}
-
-.disabled {
-  pointer-events: none;
-  opacity: 0.4;
+  background-color: var(--array-element-finished-color);
 }
