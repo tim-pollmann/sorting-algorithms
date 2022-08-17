@@ -1,4 +1,4 @@
-name: build and move build to branch 'gh-pages'
+name: build
 
 on:
   push:
