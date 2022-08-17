@@ -22,7 +22,7 @@ body {
 .form-group {
   display: flex;
   flex-direction: column;
-  background-color: purple;
+  background-color: blue;
   padding: 5px 10px;
   border: 0px;
   border-radius: 4px;
