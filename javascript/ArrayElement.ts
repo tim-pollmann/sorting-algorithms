@@ -17,6 +17,6 @@ export default class extends HTMLDivElement {
   };
 
   resetColor = () => {
-    this.className = 'array-element standard';
+    this.className = 'array-element';
   };
 }
