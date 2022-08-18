@@ -5,15 +5,18 @@ const speedToTimeout : {[speed: string]: number} = {
   slow: 50,
   medium: 25,
   fast: 0,
+  undefined: 0,
 };
 
+const finishedTimeout = 7;
+
 export default class extends HTMLDivElement {
-  speed: string;
+  timeout: number;
 
   constructor() {
     super();
     this.id = 'visualizer';
-    this.speed = 'medium';
+    this.timeout = 0;
   }
 
   generateArray(numberOfArrayElements: number) {
@@ -30,7 +33,7 @@ export default class extends HTMLDivElement {
   }
 
   setSpeed(speed: string) {
-    this.speed = speed;
+    this.timeout = speedToTimeout[speed];
   }
 
   insertBeforeArrayElement = (idx: number, idxTarget: number) => {
@@ -78,7 +81,7 @@ export default class extends HTMLDivElement {
           rightArrayElement.setHighlighted();
         }
 
-        await sleep(speedToTimeout[this.speed]);
+        await sleep(this.timeout);
       }
 
       (this.children[i - 1] as ArrayElement).setFinished();
@@ -101,7 +104,7 @@ export default class extends HTMLDivElement {
         leftArrayElement.setHighlighted();
         rightArrayElement.setHighlighted();
 
-        await sleep(speedToTimeout[this.speed]);
+        await sleep(this.timeout);
 
         if (leftArrayElement.value <= rightArrayElement.value) {
           i++;
@@ -147,7 +150,7 @@ export default class extends HTMLDivElement {
       let j = i;
 
       do {
-        await sleep(speedToTimeout[this.speed]);
+        await sleep(this.timeout);
 
         const currentArrayElement = this.children[j - 1] as ArrayElement;
         if (arrayElement.value > currentArrayElement.value) {
@@ -159,6 +162,29 @@ export default class extends HTMLDivElement {
       } while (j > 0);
 
       arrayElement.resetColor();
+    }
+
+    for (let i = 0; i < this.children.length; i++) {
+      const arrayElement = this.children[i] as ArrayElement;
+      arrayElement.setFinished();
+      await sleep(finishedTimeout);
+    }
+  };
+
+  doAlgorithm = async (algorithmName: string) => {
+    const algorithmNameToAlgorithm : {[algorithmName: string]: (() => Promise<void>) | undefined} = {
+      insertionSort: this.insertionSort,
+      selectionSort: undefined,
+      bubbleSort: this.bubbleSort,
+      quickSort: undefined,
+      mergeSort: this.mergeSort,
+      heapSort: undefined,
+      undefined,
+    };
+
+    const algorithm = algorithmNameToAlgorithm[algorithmName];
+    if (algorithm) {
+      await algorithm();
     }
   };
 }
