@@ -171,10 +171,38 @@ export default class extends HTMLDivElement {
     }
   };
 
+  selectionSort = async () => {
+    for (let i = 0; i < this.children.length - 1; i++) {
+      let minIdx = i;
+      let minValue = (this.children[i] as ArrayElement).value;
+      (this.children[i] as ArrayElement).setHighlighted();
+
+      for (let j = i + 1; j < this.children.length; j++) {
+        if ((this.children[j] as ArrayElement).value <= minValue) {
+          (this.children[minIdx] as ArrayElement).resetColor();
+          (this.children[j] as ArrayElement).setHighlighted();
+
+          minIdx = j;
+          minValue = (this.children[j] as ArrayElement).value;
+          await sleep(this.timeout);
+        }
+      }
+
+      if (minIdx !== i) {
+        this.swapArrayElements(i, minIdx);
+        await sleep(this.timeout);
+      }
+
+      (this.children[i] as ArrayElement).setFinished();
+    }
+
+    (this.children[this.children.length - 1] as ArrayElement).setFinished();
+  };
+
   doAlgorithm = async (algorithmName: string) => {
     const algorithmNameToAlgorithm : {[algorithmName: string]: (() => Promise<void>) | undefined} = {
       insertionSort: this.insertionSort,
-      selectionSort: undefined,
+      selectionSort: this.selectionSort,
       bubbleSort: this.bubbleSort,
       quickSort: undefined,
       mergeSort: this.mergeSort,
