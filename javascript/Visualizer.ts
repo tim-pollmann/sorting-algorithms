@@ -252,10 +252,22 @@ export default class extends HTMLDivElement {
 
       if (leftIdx < pivotIdx - 1) {
         await sort(leftIdx, pivotIdx - 1);
+      } else {
+        for (let i = leftIdx - 1; i <= pivotIdx; i++) {
+          if (i >= 0) {
+            (this.children[i] as ArrayElement).setFinished();
+          }
+        }
       }
 
       if (rightIdx > pivotIdx + 1) {
         await sort(pivotIdx + 1, rightIdx);
+      } else {
+        for (let i = pivotIdx; i <= rightIdx + 1; i++) {
+          if (i < this.children.length) {
+            (this.children[i] as ArrayElement).setFinished();
+          }
+        }
       }
     };
 
