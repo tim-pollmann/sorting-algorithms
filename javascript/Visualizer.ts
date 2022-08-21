@@ -285,6 +285,8 @@ export default class extends HTMLDivElement {
       undefined,
     };
 
+    this.resetColors();
+
     const algorithm = algorithmNameToAlgorithm[algorithmName];
     if (algorithm) {
       await algorithm();
