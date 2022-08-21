@@ -40,6 +40,10 @@ export default class extends HTMLDivElement {
     this.insertBefore(this.children[idx], this.children[idxTarget]);
   };
 
+  insertAfterArrayElement = (idx: number, idxTarget: number) => {
+    this.insertBefore(this.children[idx], this.children[idxTarget + 1]);
+  };
+
   swapWithLowerArrayElement = (idx: number) => {
     this.insertBefore(this.children[idx], this.children[idx - 1]);
   };
@@ -123,6 +127,18 @@ export default class extends HTMLDivElement {
           arrayElement.setFinished();
         }
       }
+
+      if (leftIdx === 0 && rightIdx === this.children.length - 1) {
+        for (; j < this.children.length; j++) {
+          const arrayElement = this.children[j] as ArrayElement;
+          arrayElement.setFinished();
+        }
+
+        for (; i < this.children.length; i++) {
+          const arrayElement = this.children[i] as ArrayElement;
+          arrayElement.setFinished();
+        }
+      }
     };
 
     const sort = async (leftIdx: number, rightIdx: number) => {
@@ -136,11 +152,6 @@ export default class extends HTMLDivElement {
     };
 
     await sort(0, this.children.length - 1);
-
-    for (let i = 0; i < this.children.length; i++) {
-      const arrayElement = this.children[i] as ArrayElement;
-      arrayElement.setFinished();
-    }
   };
 
   insertionSort = async () => {
@@ -171,12 +182,104 @@ export default class extends HTMLDivElement {
     }
   };
 
+  selectionSort = async () => {
+    for (let i = 0; i < this.children.length - 1; i++) {
+      let minIdx = i;
+      let minValue = (this.children[i] as ArrayElement).value;
+      (this.children[i] as ArrayElement).setHighlighted();
+
+      for (let j = i + 1; j < this.children.length; j++) {
+        if ((this.children[j] as ArrayElement).value <= minValue) {
+          (this.children[minIdx] as ArrayElement).resetColor();
+          (this.children[j] as ArrayElement).setHighlighted();
+
+          minIdx = j;
+          minValue = (this.children[j] as ArrayElement).value;
+          await sleep(this.timeout);
+        }
+      }
+
+      if (minIdx !== i) {
+        this.swapArrayElements(i, minIdx);
+        await sleep(this.timeout);
+      }
+
+      (this.children[i] as ArrayElement).setFinished();
+    }
+
+    (this.children[this.children.length - 1] as ArrayElement).setFinished();
+  };
+
+  quickSort = async () => {
+    const calculatePivotIdx = (leftIdx: number, rightIdx: number) => Math.floor((leftIdx + rightIdx) / 2);
+
+    const partition = async (leftIdx: number, pivotIdx: number, rightIdx: number) => {
+      let newPivotIdx = pivotIdx;
+      const pivotValue = (this.children[newPivotIdx] as ArrayElement).value;
+
+      for (let i = leftIdx; i < newPivotIdx; i++) {
+        if ((this.children[i] as ArrayElement).value > pivotValue) {
+          const arrayElement = this.children[i] as ArrayElement;
+          arrayElement.setHighlighted();
+          await sleep(this.timeout);
+          this.insertAfterArrayElement(i, newPivotIdx);
+          arrayElement.resetColor();
+          newPivotIdx--;
+          i--;
+        }
+      }
+
+      for (let i = newPivotIdx + 1; i <= rightIdx; i++) {
+        if ((this.children[i] as ArrayElement).value < pivotValue) {
+          const arrayElement = this.children[i] as ArrayElement;
+          arrayElement.setHighlighted();
+          await sleep(this.timeout);
+          this.insertBeforeArrayElement(i, newPivotIdx);
+          arrayElement.resetColor();
+          newPivotIdx++;
+        }
+      }
+
+      return newPivotIdx;
+    };
+
+    const sort = async (leftIdx: number, rightIdx: number) => {
+      let pivotIdx = calculatePivotIdx(leftIdx, rightIdx);
+      (this.children[pivotIdx] as ArrayElement).setHighlighted();
+
+      pivotIdx = await partition(leftIdx, pivotIdx, rightIdx);
+      (this.children[pivotIdx] as ArrayElement).resetColor();
+
+      if (leftIdx < pivotIdx - 1) {
+        await sort(leftIdx, pivotIdx - 1);
+      } else {
+        for (let i = leftIdx - 1; i <= pivotIdx; i++) {
+          if (i >= 0) {
+            (this.children[i] as ArrayElement).setFinished();
+          }
+        }
+      }
+
+      if (rightIdx > pivotIdx + 1) {
+        await sort(pivotIdx + 1, rightIdx);
+      } else {
+        for (let i = pivotIdx; i <= rightIdx + 1; i++) {
+          if (i < this.children.length) {
+            (this.children[i] as ArrayElement).setFinished();
+          }
+        }
+      }
+    };
+
+    await sort(0, this.children.length - 1);
+  };
+
   doAlgorithm = async (algorithmName: string) => {
     const algorithmNameToAlgorithm : {[algorithmName: string]: (() => Promise<void>) | undefined} = {
       insertionSort: this.insertionSort,
-      selectionSort: undefined,
+      selectionSort: this.selectionSort,
       bubbleSort: this.bubbleSort,
-      quickSort: undefined,
+      quickSort: this.quickSort,
       mergeSort: this.mergeSort,
       heapSort: undefined,
       undefined,
