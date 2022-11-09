@@ -281,7 +281,6 @@ export default class extends HTMLDivElement {
       bubbleSort: this.bubbleSort,
       quickSort: this.quickSort,
       mergeSort: this.mergeSort,
-      heapSort: undefined,
       undefined,
     };
 
